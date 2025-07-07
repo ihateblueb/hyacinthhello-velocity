@@ -20,7 +20,8 @@ import kotlin.jvm.optionals.getOrNull
 @Plugin(
     id = "hyacinthhello-velocity",
     name = "HyacinthHello Velocity",
-    version = BuildConstants.VERSION
+    version = BuildConstants.VERSION,
+    authors = ["blueb"]
 )
 class HyacinthHelloVelocity {
     @Inject
