@@ -7,21 +7,15 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.minimessage.MiniMessage
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import org.bstats.velocity.Metrics
 import org.slf4j.Logger
 import org.spongepowered.configurate.kotlin.extensions.get
 import org.spongepowered.configurate.kotlin.objectMapperFactory
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader
 import redis.clients.jedis.JedisPool
-import java.io.BufferedReader
 import java.io.File
-import java.io.InputStreamReader
-import java.net.ServerSocket
 import java.nio.file.Path
 import kotlin.concurrent.thread
-import kotlin.jvm.optionals.getOrNull
 
 
 @Plugin(
@@ -33,12 +27,13 @@ import kotlin.jvm.optionals.getOrNull
 class HyacinthHelloVelocity {
     @Inject
     @Suppress("unused", "FunctionName")
-    fun HyacinthHelloVelocity(server: ProxyServer, logger: Logger, @DataDirectory dataDirectory: Path) {
+    fun HyacinthHelloVelocity(server: ProxyServer, logger: Logger, @DataDirectory dataDirectory: Path, metricsFactory: Metrics.Factory) {
         instance = this
 
         Companion.server = server
         Companion.logger = logger
         Companion.dataDirectory = dataDirectory
+        Companion.metricsFactory = metricsFactory
 
         File(dataDirectory.toAbsolutePath().toString()).mkdirs()
     }
@@ -46,6 +41,8 @@ class HyacinthHelloVelocity {
     @Subscribe
     @Suppress("unused")
     fun onProxyInitialization(event: ProxyInitializeEvent) {
+        metricsFactory.make(this, 26458)
+
         val path = dataDirectory.resolve("config.yml")
         val file = File(path.toAbsolutePath().toString())
         if (!file.exists()) file.createNewFile()
@@ -80,6 +77,7 @@ class HyacinthHelloVelocity {
         lateinit var server: ProxyServer
         lateinit var logger: Logger
         lateinit var dataDirectory: Path
+        lateinit var metricsFactory: Metrics.Factory
 
         lateinit var config: Config
 

@@ -33,9 +33,13 @@ dependencies {
     implementation("org.spongepowered:configurate-yaml:4.2.0")
     implementation("org.spongepowered:configurate-extra-kotlin:4.2.0")
     implementation("redis.clients:jedis:6.0.0")
+    implementation("org.bstats:bstats-velocity:3.0.2")
 }
 
 tasks {
+    shadowJar {
+        relocate("org.bstats", "site.remlit.blueb.hyacinthhellovelocity.bstats-velocity")
+    }
     runVelocity {
         velocityVersion("3.4.0-SNAPSHOT")
     }
