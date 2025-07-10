@@ -23,8 +23,6 @@ class MessageListener : JedisPubSub() {
             try { HyacinthHelloVelocity.server.getPlayer(name).getOrNull()?.currentServer?.getOrNull()?.server }
             catch (e: Exception) { null }
 
-        println(HyacinthHelloVelocity.config.wrapperLeft + message + HyacinthHelloVelocity.config.wrapperRight)
-
         fun wrapCustomMessage(message: String): Component =
             LegacyComponentSerializer.legacyAmpersand().deserialize(
                 HyacinthHelloVelocity.config.wrapperLeft + message + HyacinthHelloVelocity.config.wrapperRight

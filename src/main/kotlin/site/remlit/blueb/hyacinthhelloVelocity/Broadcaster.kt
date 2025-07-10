@@ -10,14 +10,12 @@ class Broadcaster {
 
         fun broadcastToAll(message: ComponentLike) {
             for (server in allServers) {
-                println("BROADCAST(ALL)")
                 server.sendMessage(message)
             }
         }
         
         fun broadcastToAllBut(exceptionServer: RegisteredServer, message: ComponentLike) {
             for (server in allServers) {
-                println("BROADCAST(EXC)")
                 if (server != exceptionServer)
                     server.sendMessage(message)
             }

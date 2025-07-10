@@ -63,8 +63,6 @@ class HyacinthHelloVelocity {
         if (config == null) throw Exception("Config could not be loaded")
         Companion.config = config
 
-        println(config.overrideBackends)
-
         pool = JedisPool(config.redis.address, config.redis.port)
         thread(name = "HyacinthHello Velocity Subscriber") {
             pool.resource.use { jedis -> jedis.subscribe(MessageListener(), config.redis.channel) }
