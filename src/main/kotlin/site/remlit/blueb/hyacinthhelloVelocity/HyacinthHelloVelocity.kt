@@ -13,6 +13,7 @@ import org.spongepowered.configurate.kotlin.extensions.get
 import org.spongepowered.configurate.kotlin.objectMapperFactory
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader
 import redis.clients.jedis.JedisPool
+import redis.clients.jedis.JedisPoolConfig
 import java.io.File
 import java.nio.file.Path
 import kotlin.concurrent.thread
@@ -60,9 +61,11 @@ class HyacinthHelloVelocity {
         if (config == null) throw Exception("Config could not be loaded")
         Companion.config = config
 
-        pool = if (!config.redis.user.isNullOrBlank() || !config.redis.pass.isNullOrBlank())
-                JedisPool(config.redis.address, config.redis.port, config.redis.user?.ifBlank { null }, config.redis.pass?.ifBlank { null })
-            else JedisPool(config.redis.address, config.redis.port)
+        val jedisConfig = JedisPoolConfig()
+
+        pool = if (!config.redis.pass.isNullOrBlank()) {
+            JedisPool(jedisConfig, config.redis.address, config.redis.port, 0, config.redis.pass?.ifBlank { null }, config.redis.ssl)
+        } else JedisPool(jedisConfig, config.redis.address, config.redis.port, 0, config.redis.ssl)
 
         thread(name = "HyacinthHello Velocity Subscriber") {
             pool.resource.use { jedis -> jedis.subscribe(MessageListener(), config.redis.channel) }

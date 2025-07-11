@@ -20,6 +20,6 @@ class ConfigRedis {
     val address: String = "0.0.0.0"
     val port: Int = 6379
     val channel: String = "hyacinthhello"
-    val user: String? = null
+    val ssl: Boolean = false
     val pass: String? = null
 }
